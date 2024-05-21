@@ -1,0 +1,346 @@
+#!/usr/bin/env bash
+
+app_name='ytdl'
+app_version='0.1'
+
+# python3 yt-dlp python-mutagen ffmpeg
+
+# Default file for option -i FILE .
+ignore_file="${HOME}/.local/share/${app_name}/ignore.lst"
+
+# Used by option -s or -b .
+sponsorblock_marks_list=(
+	sponsor
+	intro
+	outro
+	selfpromo
+	preview
+	filler
+	interaction
+)
+
+# Used by option -w .
+write_extras_list=(
+	--write-playlist-metafiles
+	--write-description
+	--write-info-json
+	--write-sub
+	--write-desktop-link
+	--write-thumbnail
+)
+
+# Used by option -e .
+embed_extras_list=(
+	--xattrs
+	--embed-metadata
+	--embed-sub
+	--embed-thumbnail
+	--embed-chapters
+	--embed-info-json
+)
+
+OPTIND=1
+while getopts ':hvm:l:r:n:i:IwsbcCpPakdeqx' OPTION; do
+	case "$OPTION" in
+	h)
+		if [[ -f "${ignore_file}" ]]; then
+			ignore_count="$(grep -cE '[0-9a-zA-Z]' -- "${ignore_file}")"
+		else
+			ignore_count="0"
+		fi
+		cat <<EOF
+${app_name} [options] [url...]
+
+Simple wrapper to yt-dlp with only a subset of options.
+
+options:
+  -h                show help and exit
+  -v                show version and exit
+  -m HEIGHT         allowed max height of video size, example "480"
+  -l MB             download speed limit in MB/s, example "4.2"
+  -r LEN            shorten and restrict filenames to ASCII chars 
+  -n NAME           set first base part of output filename
+  -i FILE           set alternate ignore file [1]
+  -I                do not use any ignore file [1]
+  -w                worst available video and audio quality
+  -s                add sponsorblock chapter marks
+  -b                remove all sponsorblock segments from video
+  -c                split video creation by separate chapter files
+  -C                same as -c, but don't write index number into name
+  -p                playlist mode, download entire list with index names
+  -P                same as -p, but don't write index number into name
+  -a                audio mode, extract and keep audio file only
+  -k                keep all intermediate and uncut video files
+  -d                save description and extras as separate text files
+  -e                embed meta and extras directly into media files
+  -q                hide info, show progress bar and filepath only
+  -x                skip download, print information only
+
+[1] -i -I
+URLs are only downloaded if they are missing from ignore file. Successful
+downloads are added to it automatically. -I will not use any ignore file and
+force download existing files. Set alternative file with -i or default to:
+
+    ${ignore_count} "${ignore_file}"
+
+Copyright © 2024 Tuncay D. <https://github.com/thingsiplay/${app_name}>
+EOF
+		exit 0
+		;;
+	v)
+		echo "${app_name} v${app_version}"
+		exit 0
+		;;
+	n)
+		if ! [[ ${OPTARG} =~ ^[0-9a-z\ A-Z]+$ ]]; then
+			echo "Only alphanumerical characters allowed for -n." >&2
+			exit 1
+		fi
+		name="${OPTARG}"
+		;;
+	i)
+		ignore_file="${OPTARG}"
+		;;
+	m)
+		if ! [[ ${OPTARG} =~ ^[0-9]+$ ]]; then
+			echo "Only digits allowed for -m." >&2
+			exit 1
+		fi
+		max_height="${OPTARG}"
+		;;
+	l)
+		if ! [[ ${OPTARG} =~ ^[\.0-9]+$ ]]; then
+			echo "Only digits and dot allowed for -l." >&2
+			exit 1
+		fi
+		limit="${OPTARG}"
+		;;
+	r)
+		if ! [[ ${OPTARG} =~ ^[0-9]+$ ]]; then
+			echo "Only digits allowed for -r: '${OPTARG}'" >&2
+			exit 1
+		fi
+		restrict_filenames="${OPTARG}"
+		;;
+	I)
+		no_ignore_file=true
+		;;
+	w)
+		worst=true
+		;;
+	c)
+		split_chapters=true
+		;;
+	C)
+		split_chapters=true
+		without_chapter_index=true
+		;;
+	p)
+		playlist=true
+		;;
+	P)
+		playlist=true
+		without_playlist_index=true
+		;;
+	a)
+		extract_audio=true
+		;;
+	s)
+		enable_sponsor_block=true
+		;;
+	b)
+		enable_sponsor_block=true
+		remove_sponsorblock_marks=true
+		;;
+	k)
+		keep=true
+		;;
+	d)
+		write_extras=true
+		;;
+	e)
+		embed_extras=true
+		;;
+	x)
+		skip_download=true
+		;;
+	q)
+		quiet=true
+		;;
+	?)
+		echo "Error parsing options: '${OPTARG}'" >&2
+		exit 1
+		;;
+	esac
+done
+shift "$((OPTIND - 1))"
+
+cmd=(
+	yt-dlp
+	--ignore-errors
+)
+
+if [ -n "${worst}" ] && [ "${worst}" == true ]; then
+	quality_type="worst"
+else
+	quality_type="best"
+fi
+
+if [ -n "${quiet}" ] && [ "${quiet}" == true ]; then
+	cmd+=(
+		--quiet
+		--no-warnings
+		--progress
+		--print after_move:filepath
+		--no-simulate
+	)
+fi
+
+if [ -n "${skip_download}" ] && [ "${skip_download}" == true ]; then
+	if [ -n "${quiet}" ] && [ "${quiet}" == true ]; then
+		fmt='%(duration>%H:%M:%S)s | %(uploader)s | %(title)s | %(filesize_approx)s bytes'
+	else
+		fmt='%(duration>%H:%M:%S.%s)s %(uploader)s - %(title)s\n%(filesize_approx)s bytes\n\n%(description)s'
+	fi
+	cmd+=(
+		--skip-download
+		--print "${fmt}"
+		--no-download-archive
+		--no-overwrites
+	)
+elif [ -n "${no_ignore_file}" ] && [ "${no_ignore_file}" == true ]; then
+	cmd+=(
+		--no-download-archive
+		--force-overwrites
+	)
+elif [ -n "${ignore_file}" ]; then
+	ignore_file="$(readlink -m -- "${ignore_file}")"
+	mkdir -p -- "${ignore_file%/*}"
+	touch -- "${ignore_file}" || exit 1
+	cmd+=(
+		--download-archive "${ignore_file}"
+		--no-overwrites
+	)
+fi
+
+if [ -n "${write_extras}" ] && [ "${write_extras}" == true ]; then
+	cmd+=("${write_extras_list[@]}")
+fi
+
+if [ -n "${embed_extras}" ] && [ "${embed_extras}" == true ]; then
+	cmd+=("${embed_extras_list[@]}")
+fi
+
+if [ -n "${restrict_filenames}" ] && [ "${restrict_filenames}" -gt 0 ]; then
+	cmd+=(--restrict-filenames)
+	cmd+=(--trim-filenames "${restrict_filenames}")
+else
+	cmd+=(--no-restrict-filenames)
+fi
+
+if [ -z "${name}" ] || [ "${name}" == "" ]; then
+	if [ -n "${restrict_filenames}" ] && [ "${restrict_filenames}" -gt 0 ]; then
+		name="%(title)s_by_%(channel)s"
+	else
+		name="%(title)s by %(channel)s"
+	fi
+fi
+
+if [ -n "${playlist}" ] && [ "${playlist}" == true ]; then
+	if [ -n "${without_playlist_index}" ] && [ "${without_playlist_index}" == true ]; then
+		index=""
+	else
+		index="%(playlist_index)s - "
+	fi
+	cmd+=(--yes-playlist)
+	if [ -z "${skip_download}" ] || [ "${skip_download}" == false ]; then
+		playlist_name="%(playlist_title)s/${index}"
+		cmd+=(
+			--output
+			"${playlist_name}${name}.%(ext)s"
+		)
+	fi
+else
+	cmd+=(--no-playlist)
+	if [ -z "${skip_download}" ] || [ "${skip_download}" == false ]; then
+		cmd+=(
+			--output
+			"${name}.%(ext)s"
+		)
+	fi
+fi
+
+if [ -n "${split_chapters}" ] && [ "${split_chapters}" == true ]; then
+	cmd+=(--split-chapters)
+	if [ -z "${skip_download}" ] || [ "${skip_download}" == false ]; then
+		if [ -n "${without_chapter_index}" ] && [ "${without_chapter_index}" == true ]; then
+			index=""
+		else
+			index="%(section_number)s - "
+		fi
+		cmd+=(
+			--output
+			"chapter:${name}/${index}%(section_title)s.%(ext)s"
+		)
+	fi
+else
+	cmd+=(--no-split-chapters)
+fi
+
+if [ -n "${keep}" ] && [ "${keep}" == true ]; then
+	cmd+=(--keep-video)
+else
+	cmd+=(--no-keep-video)
+fi
+
+if [ -n "${limit}" ] && ! [ "${limit}" == '0' ]; then
+	cmd+=(--limit-rate "${limit}"M)
+fi
+
+if [ -n "${extract_audio}" ] && [ "${extract_audio}" == true ]; then
+	if [ -n "${worst}" ] && [ "${worst}" == true ]; then
+		cmd+=(
+			--extract-audio
+			--format 'worstaudio'
+		)
+	else
+		cmd+=(
+			--extract-audio
+			--audio-format best
+			--audio-quality 0
+			--format 'bestaudio'
+		)
+	fi
+else
+	if [ -n "${max_height}" ] && [ "${max_height}" -gt 0 ]; then
+		quality="${quality_type}video[height<=${max_height}]+${quality_type}audio/${quality_type}[height<=${max_height}]"
+	else
+		quality="${quality_type}video+${quality_type}audio"
+	fi
+	cmd+=(--format "${quality}")
+fi
+
+if [ -n "${enable_sponsor_block}" ] && [ "${enable_sponsor_block}" == true ]; then
+	if [ -n "${remove_sponsorblock_marks}" ] && [ "${remove_sponsorblock_marks}" == true ]; then
+		cmd+=(--sponsorblock-remove)
+	else
+		cmd+=(--sponsorblock-mark)
+	fi
+	# yt-dlp only understands comma separated list for marks.
+	for mark in "${sponsorblock_marks_list[@]}"; do
+		m="${m},${mark}"
+	done
+	cmd+=("${m:1}")
+else
+	cmd+=(--no-sponsorblock)
+fi
+
+if [ -n "${skip_download}" ] && [ "${skip_download}" == true ]; then
+	for url in "${@}"; do
+		"${cmd[@]}" "${url}" | sed -e 's/\\n/\n/g' -e '/^[[:space:]]*$/d'
+	done
+else
+	for url in "${@}"; do
+		"${cmd[@]}" "${url}"
+	done
+fi
