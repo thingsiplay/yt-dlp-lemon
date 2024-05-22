@@ -27,11 +27,6 @@ obviously requires [Python](https://www.python.org/),
 [ffmpeg](https://ffmpeg.org) and when reading or writing audio metadata, also
 [mutagen](https://github.com/quodlibet/mutagen).
 
-These libraries and programs are provided by packages that may have been
-packaged differently, depending on the distribution or package manager. Here is
-a list of commands with known setups to install (Python is excluded in the list
-below, as it is pre-installed practically on all modern systems):
-
 #### Arch (includes Manjaro, EndeavourOS)
 
 ```bash
@@ -94,6 +89,8 @@ enforced for demonstration purposes:
 ytdl -I https://youtu.be/jNQXAC9IVRw
 ```
 
+### Limitations
+
 Usually the best available quality of a video is downloaded. Set a max allowed
 size with option `-m HEIHGT` , to get a smaller sized video format. We will
 make use of this option many times, so the examples are quickly done. `HEIGHT`
@@ -120,6 +117,8 @@ truncate its length to whatever is specified:
 ytdl -I -r 8 https://youtu.be/jNQXAC9IVRw
 ```
 
+### Playlist or audio mode
+
 Playlist mode `-p` downloads all videos from a playlist. In addition a sub
 directory is created and the filenames include an index. For testing, let's
 combine this with option `-m` to download small versions of the video. This
@@ -135,6 +134,8 @@ or podcasts, where the visual part is not important or present at all.
 ```bash
 ytdl -I -a https://youtu.be/jNQXAC9IVRw
 ```
+
+### Sponsor and chapter marks
 
 Split video by it's chapter marks and create separate files in a sub directory:
 
@@ -165,6 +166,8 @@ video in separate files `-c` based on the segments:
 ```bash
 ytdl -I -m 160 -s -c https://youtu.be/9Jxxbh4HbtE
 ```
+
+### Metadata and additional files
 
 There are also bunch of additional meta, thumbnail images and extra files to
 each video. Option `-d` will download these video descriptions and other
