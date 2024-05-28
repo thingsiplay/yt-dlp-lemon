@@ -51,12 +51,13 @@ EOF
 help_options() {
 	cat <<EOF
 options:
-  -h                show common help and exit
+  -h                show help and exit
   -H                show all options, notes and exit
-  -m HEIGHT         max height, example "480"
-  -f FORMAT         repack format, example "mp4"
-  -b                remove sponsorblock segments
-  -c                split video by chapters
+  -m HEIGHT         max height
+  -f FORMAT         repack format
+  -I                no ignore file
+  -b                remove sponsorblock segments 
+  -c                split by chapters
   -p                playlist mode
   -a                audio mode
   -e                embed meta and extras
@@ -68,17 +69,17 @@ EOF
 help_options_all() {
 	cat <<EOF
 options:
-  -h                show common help and exit
+  -h                show help and exit
   -H                show all options, notes and exit
   -v                show version and exit
   -m HEIGHT         allowed max height of video size, example "480"
   -l MB             download speed limit in MB/s, example "4.2"
-  -r LEN            shorten and restrict filenames to ASCII chars 
+  -r LEN            restrict and shorten filenames to ASCII chars 
   -n NAME           set first base part of output filename
   -i FILE           set alternate ignore file [1]
   -I                do not use any ignore file [1]
-  -f FORMAT         repack output to format, example "mp4" [2]
-  -F FORMAT         same as -f, but will force re-encode if needed
+  -f FORMAT         repackage container to format, example "mp4" [2]
+  -F FORMAT         same as -f, but will force re-encode if needed [2]
   -w                worst available video and audio quality
   -s                add sponsorblock chapter marks
   -b                remove all sponsorblock segments from video
