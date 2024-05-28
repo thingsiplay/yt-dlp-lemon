@@ -39,22 +39,36 @@ embed_extras_list=(
 	--embed-info-json
 )
 
-OPTIND=1
-while getopts ':hvm:l:r:n:i:IwsbcCpPakdeqx' OPTION; do
-	case "$OPTION" in
-	h)
-		if [[ -f "${ignore_file}" ]]; then
-			ignore_count="$(grep -cE '[0-9a-zA-Z]' -- "${ignore_file}")"
-		else
-			ignore_count="0"
-		fi
-		cat <<EOF
+help_header() {
+	cat <<EOF
 ${app_name} [options] [url...]
 
 Simple wrapper to yt-dlp with only a subset of options.
 
+EOF
+}
+
+help_options() {
+	cat <<EOF
 options:
-  -h                show help and exit
+  -h                show common help and exit
+  -H                show all options, notes and exit
+  -m HEIGHT         allowed max height of video size, example "480"
+  -b                remove all sponsorblock segments from video
+  -c                split video creation by separate chapter files
+  -p                playlist mode, download entire list with index names
+  -a                audio mode, extract and keep audio file only
+  -e                embed meta and extras directly into media files
+  -q                hide info, show progress bar and filepath only
+  -x                skip download, print information only
+EOF
+}
+
+help_options_all() {
+	cat <<EOF
+options:
+  -h                show common help and exit
+  -H                show all options, notes and exit
   -v                show version and exit
   -m HEIGHT         allowed max height of video size, example "480"
   -l MB             download speed limit in MB/s, example "4.2"
@@ -75,6 +89,16 @@ options:
   -e                embed meta and extras directly into media files
   -q                hide info, show progress bar and filepath only
   -x                skip download, print information only
+EOF
+}
+
+help_notes() {
+	if [[ -f "${ignore_file}" ]]; then
+		ignore_count="$(grep -cE '[0-9a-zA-Z]' -- "${ignore_file}")"
+	else
+		ignore_count="0"
+	fi
+	cat <<EOF
 
 [1] -i -I
 URLs are only downloaded if they are missing from ignore file. Successful
@@ -82,9 +106,30 @@ downloads are added to it automatically. -I will not use any ignore file and
 force download existing files. Set alternative file with -i or default to:
 
     ${ignore_count} "${ignore_file}"
+EOF
+}
+
+help_footer() {
+	cat <<EOF
 
 Copyright © 2024 Tuncay D. <https://github.com/thingsiplay/${app_name}>
 EOF
+}
+
+OPTIND=1
+while getopts ':hHvm:l:r:n:i:IwsbcCpPakdeqx' OPTION; do
+	case "$OPTION" in
+	h)
+		help_header
+		help_options
+		help_footer
+		exit 0
+		;;
+	H)
+		help_header
+		help_options_all
+		help_notes
+		help_footer
 		exit 0
 		;;
 	v)
