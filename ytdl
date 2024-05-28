@@ -251,17 +251,15 @@ cmd=(
 	--ignore-errors
 )
 
-if [ -n "${format_remux}" ] && ! [ "${format_remux}" == "" ]; then
-	cmd+=(
-		--remux-video
-		"${format_remux}"
-	)
-fi
-
 if [ -n "${format_recode}" ] && ! [ "${format_recode}" == "" ]; then
 	cmd+=(
 		--recode-video
 		"${format_recode}"
+	)
+elif [ -n "${format_remux}" ] && ! [ "${format_remux}" == "" ]; then
+	cmd+=(
+		--remux-video
+		"${format_remux}"
 	)
 fi
 
