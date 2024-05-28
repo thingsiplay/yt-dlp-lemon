@@ -54,6 +54,7 @@ options:
   -h                show common help and exit
   -H                show all options, notes and exit
   -m HEIGHT         max height, example "480"
+  -f FORMAT         repack format, example "mp4"
   -b                remove sponsorblock segments
   -c                split video by chapters
   -p                playlist mode
@@ -76,6 +77,8 @@ options:
   -n NAME           set first base part of output filename
   -i FILE           set alternate ignore file [1]
   -I                do not use any ignore file [1]
+  -f FORMAT         repack output to format, example "mp4" [2]
+  -F FORMAT         same as -f, but will force re-encode if needed
   -w                worst available video and audio quality
   -s                add sponsorblock chapter marks
   -b                remove all sponsorblock segments from video
@@ -106,6 +109,15 @@ downloads are added to it automatically. -I will not use any ignore file and
 force download existing files. Set alternative file with -i or default to:
 
     ${ignore_count} "${ignore_file}"
+
+[2] -f -F
+-f to repackage output format without re-encoding file. -F will instead force
+re-encoding to specified format when needed and encoder is available. If
+container does not support the video/audio codec, then operation fails. Simple
+examples are "mp4" or "mp3". Available formats:
+
+    avi, flv, gif, mkv, mov, mp4, webm, aac, aiff, alac, flac, m4a, mka, mp3,
+    ogg, opus, vorbis, wav
 EOF
 }
 
@@ -117,7 +129,7 @@ EOF
 }
 
 OPTIND=1
-while getopts ':hHvm:l:r:n:i:IwsbcCpPakdeqx' OPTION; do
+while getopts ':hHvm:l:r:n:i:If:F:wsbcCpPakdeqx' OPTION; do
 	case "$OPTION" in
 	h)
 		help_header
@@ -162,13 +174,27 @@ while getopts ':hHvm:l:r:n:i:IwsbcCpPakdeqx' OPTION; do
 		;;
 	r)
 		if ! [[ ${OPTARG} =~ ^[0-9]+$ ]]; then
-			echo "Only digits allowed for -r: '${OPTARG}'" >&2
+			echo "Only digits allowed for -r." >&2
 			exit 1
 		fi
 		restrict_filenames="${OPTARG}"
 		;;
 	I)
 		no_ignore_file=true
+		;;
+	f)
+		if ! [[ ${OPTARG} =~ ^[a-z0-9/\>]+$ ]]; then
+			echo "Only digits, lowercase, '/', '>' allowed for -f" >&2
+			exit 1
+		fi
+		format_remux="${OPTARG}"
+		;;
+	F)
+		if ! [[ ${OPTARG} =~ ^[a-z0-9/\>]+$ ]]; then
+			echo "Only digits, lowercase, '/', '>' allowed for -F." >&2
+			exit 1
+		fi
+		format_recode="${OPTARG}"
 		;;
 	w)
 		worst=true
@@ -224,6 +250,20 @@ cmd=(
 	yt-dlp
 	--ignore-errors
 )
+
+if [ -n "${format_remux}" ] && ! [ "${format_remux}" == "" ]; then
+	cmd+=(
+		--remux-video
+		"${format_remux}"
+	)
+fi
+
+if [ -n "${format_recode}" ] && ! [ "${format_recode}" == "" ]; then
+	cmd+=(
+		--recode-video
+		"${format_recode}"
+	)
+fi
 
 if [ -n "${worst}" ] && [ "${worst}" == true ]; then
 	quality_type="worst"
