@@ -53,10 +53,12 @@ Just run the script with an URL to a YouTube video to start downloading.
 ytdl [options] [url...]
 ```
 
-Show all available options with `-h`:
+Show most common list of options with `-h` (short help) or all available
+options and additional notes with `-H` (long help):
 
 ```bash
 ytdl -h
+ytdl -H
 ```
 
 By default, every downloaded video id will be added to an ignore list
