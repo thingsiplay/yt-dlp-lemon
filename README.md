@@ -188,4 +188,21 @@ elements. Note the video file in this example has the ".mkv" extension now.
 ytdl -I -m 160 -e https://youtu.be/jNQXAC9IVRw
 ```
 
+### Output format
+
+There is even an option to specify the output format with `-f` . This is a
+simple conversion without re-encoding the file, which means no quality loss
+and very fast operation:
+
+```bash
+ytdl -I -f mp4 https://youtu.be/jNQXAC9IVRw
+```
+
+But the container has to support the video/audio codec. A specific format can
+be forced with uppercase `-F`, which will re-encode if needed:
+
+```bash
+ytdl -I -F mp3 https://youtu.be/jNQXAC9IVRw
+```
+
 Have a great rest of your day.
