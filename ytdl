@@ -53,14 +53,14 @@ help_options() {
 options:
   -h                show common help and exit
   -H                show all options, notes and exit
-  -m HEIGHT         allowed max height of video size, example "480"
-  -b                remove all sponsorblock segments from video
-  -c                split video creation by separate chapter files
-  -p                playlist mode, download entire list with index names
-  -a                audio mode, extract and keep audio file only
-  -e                embed meta and extras directly into media files
-  -q                hide info, show progress bar and filepath only
-  -x                skip download, print information only
+  -m HEIGHT         max height, example "480"
+  -b                remove sponsorblock segments
+  -c                split video by chapters
+  -p                playlist mode
+  -a                audio mode
+  -e                embed meta and extras
+  -q                show filepath only
+  -x                skip download
 EOF
 }
 
