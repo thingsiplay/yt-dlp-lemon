@@ -96,7 +96,7 @@ ytdl -I https://youtu.be/jNQXAC9IVRw
 ### Set limits
 
 Usually the best available quality of a video is downloaded. Set a max allowed
-size with option `-m HEIHGT` , to get a smaller sized video format. We will
+size with option `-m HEIGHT` , to get a smaller sized video format. We will
 make use of this option many times, so the examples are quickly done. `HEIGHT`
 is the pixel dimension for the video height:
 
@@ -152,16 +152,16 @@ Did you know `yt-dlp` supports [SponsorBlock](https://sponsor.ajay.app/)
 directly? A free community based service for YouTube videos to recognize and
 add chapter marks for sponsored segments. If you have a video player (such as
 VLC player) then you can view and select those marks directly. Option `-s` will
-add chapter marks from the video, and recognizes sponsors automatically.
+add chapter marks into the video, and recognizes sponsors automatically.
 
 ```bash
 ytdl -I -m 160 -s https://youtu.be/9Jxxbh4HbtE
 ```
 
-These sponsored segments can be automatically removed and blocked in the final
-video file too. But `-b` does not add any marks and handles sponsors only
-video. In the following example 2 segments are recognized and removed, cutting
-total video length from 9:42 to 8:51 minutes.
+Sponsored segments can be automatically removed and blocked in the final video
+file too. But `-b` does not add any marks and handles sponsors only. In the
+following example 2 segments are recognized and removed, cutting total video
+length from 9:42 to 8:51 minutes.
 
 ```bash
 ytdl -I -m 160 -b https://youtu.be/9Jxxbh4HbtE
@@ -187,16 +187,17 @@ ytdl -I -m 160 -Sb https://youtu.be/9Jxxbh4HbtE
 
 There are also bunch of additional meta, thumbnail images and extra files to
 each video. Option `-d` will download these video descriptions and other
-metadata as separate files. Note the video file in this examaple has the
+metadata as separate files. Note the video file in this example has the
 ".webm" extension.
 
 ```bash
 ytdl -I -m 160 -d https://youtu.be/jNQXAC9IVRw
 ```
 
-We can also instead embed these metadata, thumbnail image and subtitles into
-the actual video file. Media players can then display and interact with those
-elements. Note the video file in this example has the ".mkv" extension now.
+Metadata, thumbnail image, subtitles and more can be embed into the actual
+video file with `-e` . Media players can display or interact with those
+elements. Not all container formats support all of these extras, so ".mkv" will
+be used automatically:
 
 ```bash
 ytdl -I -m 160 -e https://youtu.be/jNQXAC9IVRw
@@ -204,16 +205,18 @@ ytdl -I -m 160 -e https://youtu.be/jNQXAC9IVRw
 
 ### Output format
 
-There is even an option to specify the output format with `-f` . This is a
-simple conversion without re-encoding the file, which means no quality loss
-and very fast operation:
+Specify container format for output file with option `-f` . This will do a
+simple conversion, meaning content is not re-encoded, just re-packaged. This
+can fail, if the container does not support the audio or video codecs or
+any specific feature. On the other hand this is lossless conversion and fast:
 
 ```bash
 ytdl -I -f mp4 https://youtu.be/jNQXAC9IVRw
 ```
 
-But the container has to support the video/audio codec. A specific format can
-be forced with uppercase `-F`, which will re-encode if needed:
+A re-encoding of the video content can be forced with uppercase `-F` if needed.
+This has much more freedom to choose output format than `-f` and will take much
+longer time to finish:
 
 ```bash
 ytdl -I -F mp3 https://youtu.be/jNQXAC9IVRw
