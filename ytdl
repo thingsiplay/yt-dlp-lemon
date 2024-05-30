@@ -130,7 +130,6 @@ sponsored segments from final video output. The uppercase variants -S and -B do
 the same respectively, but recognizes all type of segments:
 
     ${sponsorblock_all_marks_list[@]}
-
 EOF
 }
 
