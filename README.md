@@ -68,6 +68,8 @@ automatically. This will prevent re downloading the same video again.
 ytdl https://youtu.be/jNQXAC9IVRw
 ```
 
+### Skip or force download
+
 Skip downloading the video and just output information about the online video.
 Even if it's already in the local ignore list:
 
@@ -91,7 +93,7 @@ enforced for demonstration purposes:
 ytdl -I https://youtu.be/jNQXAC9IVRw
 ```
 
-### Limitations
+### Set limits
 
 Usually the best available quality of a video is downloaded. Set a max allowed
 size with option `-m HEIHGT` , to get a smaller sized video format. We will
