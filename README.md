@@ -196,8 +196,9 @@ Metadata and chapter marks can be embedded into the video file itself with
 option `-e`:
 
 (_NOTE: Chapter marks seem not to be added with `-e` or `-E` . Reportedly this
-works with ffmpeg 6.0 or older, but not with 6.1. Hopefully this problem is
-resolved with ffmpeg 7.0. ffmpeg is the software used by yt-dlp itself._)
+works with ffmpeg 6.0 or older, but not with 6.1. I compiled and tested with
+ffmpeg 7.0.1, but it seems to be not working either. ffmpeg is the software
+used by yt-dlp itself._)
 
 ```bash
 ytdl -I -m 160 -e https://youtu.be/jNQXAC9IVRw
