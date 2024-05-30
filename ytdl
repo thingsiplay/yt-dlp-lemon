@@ -9,7 +9,7 @@ app_version='0.2'
 ignore_file="${HOME}/.local/share/${app_name}/ignore.lst"
 
 # Used by option -s or -b .
-sponsorblock_marks_list=(
+sponsorblock_all_marks_list=(
 	sponsor
 	intro
 	outro
@@ -56,7 +56,8 @@ options:
   -m HEIGHT         max height
   -f FORMAT         repack format
   -I                no ignore file
-  -b                remove sponsorblock segments 
+  -S                add all type of sponsorblock marks
+  -b                remove sponsor only segments
   -c                split by chapters
   -p                playlist mode
   -a                audio mode
@@ -81,8 +82,10 @@ options:
   -f FORMAT         repackage container to format, example "mp4" [2]
   -F FORMAT         same as -f, but will force re-encode if needed [2]
   -w                worst available video and audio quality
-  -s                add sponsorblock chapter marks
-  -b                remove all sponsorblock segments from video
+  -s                add chapter marks for sponsors by SponsorBlock [3]
+  -S                same as -s, but add all type of segments [3]
+  -b                remove sponsor segments by SponsorBlock [3]
+  -B                same as -b, but remove all type of segments [3]
   -c                split video creation by separate chapter files
   -C                same as -c, but don't write index number into name
   -p                playlist mode, download entire list with index names
@@ -119,6 +122,15 @@ examples are "mp4" or "mp3". Available formats:
 
     avi, flv, gif, mkv, mov, mp4, webm, aac, aiff, alac, flac, m4a, mka, mp3,
     ogg, opus, vorbis, wav
+
+[3] -s -S -b -B
+-s uses SponsorBlock engine to recognize sponsored segments and add chapter
+marks for video players. Uppercase -S will add marks for all type of segments
+listed below. -b blocks and removes sponsors from final video and uppercase -B
+will remove all types. -S and -b can be combined. List of all types:
+
+    ${sponsorblock_all_marks_list[@]}
+
 EOF
 }
 
@@ -130,7 +142,7 @@ EOF
 }
 
 OPTIND=1
-while getopts ':hHvm:l:r:n:i:If:F:wsbcCpPakdeqx' OPTION; do
+while getopts ':hHvm:l:r:n:i:If:F:wsSbBcCpPakdeqx' OPTION; do
 	case "$OPTION" in
 	h)
 		help_header
@@ -218,11 +230,16 @@ while getopts ':hHvm:l:r:n:i:If:F:wsbcCpPakdeqx' OPTION; do
 		extract_audio=true
 		;;
 	s)
-		enable_sponsor_block=true
+		add_marks=(sponsor)
+		;;
+	S)
+		add_marks=("${sponsorblock_all_marks_list[@]}")
 		;;
 	b)
-		enable_sponsor_block=true
-		remove_sponsorblock_marks=true
+		block_marks=(sponsor)
+		;;
+	B)
+		block_marks=("${sponsorblock_all_marks_list[@]}")
 		;;
 	k)
 		keep=true
@@ -404,19 +421,20 @@ else
 	cmd+=(--format "${quality}")
 fi
 
-if [ -n "${enable_sponsor_block}" ] && [ "${enable_sponsor_block}" == true ]; then
-	if [ -n "${remove_sponsorblock_marks}" ] && [ "${remove_sponsorblock_marks}" == true ]; then
-		cmd+=(--sponsorblock-remove)
-	else
-		cmd+=(--sponsorblock-mark)
-	fi
-	# yt-dlp only understands comma separated list for marks.
-	for mark in "${sponsorblock_marks_list[@]}"; do
-		m="${m},${mark}"
+if [ "${#add_marks[@]}" -gt 0 ]; then
+	cmd+=(--sponsorblock-mark)
+	for m in "${add_marks[@]}"; do
+		marks="${marks},${m}"
 	done
-	cmd+=("${m:1}")
-else
-	cmd+=(--no-sponsorblock)
+	cmd+=("${marks:1}")
+fi
+
+if [ "${#block_marks[@]}" -gt 0 ]; then
+	cmd+=(--sponsorblock-remove)
+	for m in "${block_marks[@]}"; do
+		marks="${marks},${m}"
+	done
+	cmd+=("${marks:1}")
 fi
 
 if [ -n "${skip_download}" ] && [ "${skip_download}" == true ]; then
