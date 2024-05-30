@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 app_name='ytdl'
-app_version='0.2'
+app_version='0.3'
 
 # python3 yt-dlp python-mutagen ffmpeg
 

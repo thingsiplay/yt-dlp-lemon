@@ -2,7 +2,7 @@
 
 Keep track of changes for [ytdl](https://github.com/thingsiplay/ytdl) .
 
-## Next
+## 0.3 - Mai 31, 2024
 
 - initial Changelog
 
