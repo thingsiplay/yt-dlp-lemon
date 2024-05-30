@@ -55,7 +55,7 @@ options:
   -H                show all options, notes and exit
   -m HEIGHT         max height
   -f FORMAT         repack format
-  -I                no ignore file,
+  -I                no ignore file
   -s                add chapter marks + recognize sponsors
   -b                remove sponsored segments
   -c                split file by chapters
