@@ -8,7 +8,7 @@ app_version='0.2'
 # Default file for option -i FILE .
 ignore_file="${HOME}/.local/share/${app_name}/ignore.lst"
 
-# Used by option -s or -b .
+# Used by option -S or -B
 sponsorblock_all_marks_list=(
 	sponsor
 	intro
@@ -19,8 +19,8 @@ sponsorblock_all_marks_list=(
 	interaction
 )
 
-# Used by option -w .
-write_extras_list=(
+# Used by option -D
+write_all_extras_list=(
 	--write-playlist-metafiles
 	--write-description
 	--write-info-json
@@ -29,8 +29,8 @@ write_extras_list=(
 	--write-thumbnail
 )
 
-# Used by option -e .
-embed_extras_list=(
+# Used by option -E
+embed_all_extras_list=(
 	--xattrs
 	--embed-metadata
 	--embed-sub
@@ -141,7 +141,7 @@ EOF
 }
 
 OPTIND=1
-while getopts ':hHvm:l:r:n:i:If:F:wsSbBcCpPakdeqx' OPTION; do
+while getopts ':hHvm:l:r:n:i:If:F:wsSbBcCpPakdDeEqx' OPTION; do
 	case "$OPTION" in
 	h)
 		help_header
@@ -244,10 +244,16 @@ while getopts ':hHvm:l:r:n:i:If:F:wsSbBcCpPakdeqx' OPTION; do
 		keep=true
 		;;
 	d)
-		write_extras=true
+		write_extras=(--write-description --write-info-json)
+		;;
+	D)
+		write_extras=("${write_all_extras_list[@]}")
 		;;
 	e)
-		embed_extras=true
+		embed_extras=(--embed-metadata --embed-chapters)
+		;;
+	E)
+		embed_extras=("${embed_all_extras_list[@]}")
 		;;
 	x)
 		skip_download=true
@@ -321,14 +327,6 @@ elif [ -n "${ignore_file}" ]; then
 		--download-archive "${ignore_file}"
 		--no-overwrites
 	)
-fi
-
-if [ -n "${write_extras}" ] && [ "${write_extras}" == true ]; then
-	cmd+=("${write_extras_list[@]}")
-fi
-
-if [ -n "${embed_extras}" ] && [ "${embed_extras}" == true ]; then
-	cmd+=("${embed_extras_list[@]}")
 fi
 
 if [ -n "${restrict_filenames}" ] && [ "${restrict_filenames}" -gt 0 ]; then
@@ -434,6 +432,14 @@ if [ "${#block_marks[@]}" -gt 0 ]; then
 		marks="${marks},${m}"
 	done
 	cmd+=("${marks:1}")
+fi
+
+if [ "${#write_extras[@]}" -gt 0 ]; then
+	cmd+=("${write_extras[@]}")
+fi
+
+if [ "${#embed_extras[@]}" -gt 0 ]; then
+	cmd+=("${embed_extras[@]}")
 fi
 
 if [ -n "${skip_download}" ] && [ "${skip_download}" == true ]; then
