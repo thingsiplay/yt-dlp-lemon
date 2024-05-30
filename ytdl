@@ -61,7 +61,8 @@ options:
   -c                split file by chapters
   -p                playlist mode
   -a                audio mode
-  -e                embed meta and extras
+  -d                download description files
+  -e                embed meta and chapters
   -q                show filepath only
   -x                skip download
 EOF
@@ -73,27 +74,35 @@ options:
   -h                show help and exit
   -H                show all options, notes and exit
   -v                show version and exit
+
   -m HEIGHT         allowed max height of video size, example "480"
   -l MB             download speed limit in MB/s, example "4.2"
   -r LEN            restrict and shorten filenames to ASCII chars 
   -n NAME           set first base part of output filename
   -i FILE           set alternate ignore file [1]
   -I                do not use any ignore file, force download [1]
+
   -f FORMAT         repackage container to format, example "mp4" [2]
   -F FORMAT         same as -f, but will force re-encode if needed [2]
   -w                worst available video and audio quality
+
   -s                add chapter marks + recognize sponsor by SponsorBlock [3]
   -S                same as -s, but add all type of segments [3]
   -b                remove sponsor segments from file by SponsorBlock [3]
   -B                same as -b, but remove all type of segments [3]
   -c                split video creation by separate chapter files
   -C                same as -c, but don't write index number into name
+
   -p                playlist mode, download entire list with index names
   -P                same as -p, but don't write index number into name
   -a                audio mode, extract and keep audio file only
   -k                keep all intermediate and uncut video files
-  -d                save description and extras as separate text files
-  -e                embed meta and extras directly into media files
+
+  -d                save description and info-json as separate text files
+  -D                same as -d, but download all type of extra files
+  -e                embed metadata and chapter marks into video file
+  -E                same as -e, but embed all type of extras
+
   -q                hide info, show progress bar and filepath only
   -x                skip download, print information only
 EOF
