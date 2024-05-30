@@ -183,24 +183,35 @@ add rest of the chapter marks in addition to get the best of both worlds:
 ytdl -I -m 160 -Sb https://youtu.be/9Jxxbh4HbtE
 ```
 
-### Metadata and additional files
+### Metadata and extra files
 
-There are also bunch of additional meta, thumbnail images and extra files to
-each video. Option `-d` will download these video descriptions and other
-metadata as separate files. Note the video file in this example has the
-".webm" extension.
+Additional video description and info files are downloaded alongside the video
+with option `-d`:
 
 ```bash
 ytdl -I -m 160 -d https://youtu.be/jNQXAC9IVRw
 ```
 
-Metadata, thumbnail image, subtitles and more can be embed into the actual
-video file with `-e` . Media players can display or interact with those
-elements. Not all container formats support all of these extras, so ".mkv" will
-be used automatically:
+Metadata and chapter marks can be embedded into the video file itself with
+option `-e`:
+
+(_NOTE: Chapter marks seem not to be added with `-e` or `-E` . Reportedly this
+works with ffmpeg 6.0 or older, but not with 6.1. Hopefully this problem is
+resolved with ffmpeg 7.0. ffmpeg is the software used by yt-dlp itself._)
 
 ```bash
 ytdl -I -m 160 -e https://youtu.be/jNQXAC9IVRw
+```
+
+To write even more of these extra files, such as thumbnail image or a desktop
+link file (shortcut to original YouTube link), use uppercase `-D` . An
+uppercase `-E` will similarly include much more data to embed, such as
+thumbnail image and subtitles. Not all container formats are suited for all
+type of embedded data. Therefore the output file format will be "mkv" to
+support everything.
+
+```bash
+ytdl -I -m 160 -DE https://youtu.be/jNQXAC9IVRw
 ```
 
 ### Output format
