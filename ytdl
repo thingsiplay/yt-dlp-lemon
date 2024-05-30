@@ -55,10 +55,10 @@ options:
   -H                show all options, notes and exit
   -m HEIGHT         max height
   -f FORMAT         repack format
-  -I                no ignore file
-  -S                add all type of sponsorblock marks
-  -b                remove sponsor only segments
-  -c                split by chapters
+  -I                no ignore file,
+  -s                add chapter marks + recognize sponsors
+  -b                remove sponsored segments
+  -c                split file by chapters
   -p                playlist mode
   -a                audio mode
   -e                embed meta and extras
@@ -78,13 +78,13 @@ options:
   -r LEN            restrict and shorten filenames to ASCII chars 
   -n NAME           set first base part of output filename
   -i FILE           set alternate ignore file [1]
-  -I                do not use any ignore file [1]
+  -I                do not use any ignore file, force download [1]
   -f FORMAT         repackage container to format, example "mp4" [2]
   -F FORMAT         same as -f, but will force re-encode if needed [2]
   -w                worst available video and audio quality
-  -s                add chapter marks for sponsors by SponsorBlock [3]
+  -s                add chapter marks + recognize sponsor by SponsorBlock [3]
   -S                same as -s, but add all type of segments [3]
-  -b                remove sponsor segments by SponsorBlock [3]
+  -b                remove sponsor segments from file by SponsorBlock [3]
   -B                same as -b, but remove all type of segments [3]
   -c                split video creation by separate chapter files
   -C                same as -c, but don't write index number into name
@@ -124,10 +124,10 @@ examples are "mp4" or "mp3". Available formats:
     ogg, opus, vorbis, wav
 
 [3] -s -S -b -B
--s uses SponsorBlock engine to recognize sponsored segments and add chapter
-marks for video players. Uppercase -S will add marks for all type of segments
-listed below. -b blocks and removes sponsors from final video and uppercase -B
-will remove all types. -S and -b can be combined. List of all types:
+-s will use SponsorBlock engine to add chapter marks for your video player. In
+addition, it will also recognize sponsored segments. -b will remove those
+sponsored segments from final video output. The uppercase variants -S and -B do
+the same respectively, but recognizes all type of segments:
 
     ${sponsorblock_all_marks_list[@]}
 
