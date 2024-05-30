@@ -139,34 +139,46 @@ ytdl -I -a https://youtu.be/jNQXAC9IVRw
 
 ### Sponsor and chapter marks
 
-Split video by it's chapter marks and create separate files in a sub directory:
+Split video by it's chapter marks and create separate files in a sub directory
+with option `-c`:
 
 ```bash
 ytdl -I -c https://youtu.be/jNQXAC9IVRw
 ```
 
 Did you know `yt-dlp` supports [SponsorBlock](https://sponsor.ajay.app/)
-directly? SponsorBlock is a free service for YouTube videos, where it's
-community add timestamps and chapters to mark sponsored segments. There are
-more stuff that are marked, such as intro, outro or some self promotion from
-the YouTuber. This highly depends on the community and not all videos have
-these information.
+directly? A free community based service for YouTube videos to recognize and
+add chapter marks for sponsored segments. If you have a video player (such as
+VLC player) then you can view and select those marks directly. Option `-s` will
+add chapter marks from the video, and recognizes sponsors automatically.
 
-With option `-s` these segments are added as marks in the video file. It
-depends on the video player to display or interact with those marks. However
-with option `-b` these segments are entirely cut out from the final downloaded
-video. In the following example, the total video length is cut down from 9:42
-minutes to around 8:18 minutes.
+```bash
+ytdl -I -m 160 -s https://youtu.be/9Jxxbh4HbtE
+```
+
+These sponsored segments can be automatically removed and blocked in the final
+video file too. But `-b` does not add any marks and handles sponsors only
+video. In the following example 2 segments are recognized and removed, cutting
+total video length from 9:42 to 8:51 minutes.
 
 ```bash
 ytdl -I -m 160 -b https://youtu.be/9Jxxbh4HbtE
 ```
 
-Or instead removing those segments, combine adding marks `-s` with splitting
-video in separate files `-c` based on the segments:
+Uppercase `-S` and `-B` does the same respectively, but recognizes more type of
+segments such as filler and interaction reminder. In following example `-B`
+will recognize 7 segments from SponsorBlock database and reduce total video
+length to 8:18 minutes.
 
 ```bash
-ytdl -I -m 160 -s -c https://youtu.be/9Jxxbh4HbtE
+ytdl -I -m 160 -B https://youtu.be/9Jxxbh4HbtE
+```
+
+Combine `-S` and `-b` in example to block sponsors from final output file and
+add rest of the chapter marks in addition to get the best of both worlds:
+
+```bash
+ytdl -I -m 160 -Sb https://youtu.be/9Jxxbh4HbtE
 ```
 
 ### Metadata and additional files
