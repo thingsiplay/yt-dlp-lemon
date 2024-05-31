@@ -68,6 +68,10 @@ automatically. This will prevent re downloading the same video again.
 ytdl https://youtu.be/jNQXAC9IVRw
 ```
 
+All downloaded file names will be sanitized a little by default. Characters
+such ":" and "?" are stripped out, but many other characters such as "!" or "ä"
+are still allowed.
+
 ### Skip or force download
 
 Skip downloading the video and just output information about the online video.
