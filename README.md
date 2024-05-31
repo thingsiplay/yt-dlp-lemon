@@ -132,6 +132,16 @@ results in 4 videos and 22 MB (at time of writing this document):
 ytdl -I -m 240 -p https://youtube.com/playlist?list=PL6-7feKhsltT9ZTElq6V2Z2EZN71wyxrX
 ```
 
+For some playlists, the top most entry will always be the first newest added
+one. If you periodically check the playlist for new entries, this would mess
+with the numbering system. For such cases you can download and number the files
+in reverse order with `-R`. There is also an option uppercase `-P` to avoid
+numbering of downloaded filenames entirely.
+
+```bash
+ytdl -I -m 240 -R https://youtube.com/playlist?list=PL6-7feKhsltT9ZTElq6V2Z2EZN71wyxrX
+```
+
 Extract and keep an audio file format only with option `-a` . Useful for music
 or podcasts, where the visual part is not important or present at all.
 
