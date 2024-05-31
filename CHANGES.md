@@ -2,6 +2,13 @@
 
 Keep track of changes for [ytdl](https://github.com/thingsiplay/ytdl) .
 
+## Next
+
+- new: option -R to download playlists in reverse order, with last entry as
+  index number 1
+- changed: sanitize a little bit the produced file names by default, still not
+  as strict as -r option
+
 ## 0.3 - Mai 31, 2024
 
 - initial Changelog
