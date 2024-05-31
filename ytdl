@@ -347,7 +347,15 @@ if [ -n "${restrict_filenames}" ] && [ "${restrict_filenames}" -gt 0 ]; then
 	cmd+=(--restrict-filenames)
 	cmd+=(--trim-filenames "${restrict_filenames}")
 else
-	cmd+=(--no-restrict-filenames)
+	cmd+=(--windows-filenames)
+	cmd+=(--replace-in-metadata "title,channel,playlist" "[/|]" " ")
+	cmd+=(--replace-in-metadata "title,channel,playlist" "[–•]" "-")
+	cmd+=(--replace-in-metadata "title,channel,playlist" " ?: ?" " - ")
+	cmd+=(--replace-in-metadata "title,channel,playlist" "<" "(")
+	cmd+=(--replace-in-metadata "title,channel,playlist" ">" ")")
+	cmd+=(--replace-in-metadata "title,channel,playlist" " +" " ")
+	cmd+=(--replace-in-metadata "title,channel,playlist" "[^][()!0-9a-zA-Z- _а-яА-ЯŽžÀ-ÿ\.,\"']" "")
+	cmd+=(--replace-in-metadata "title,channel,playlist" "\(\)" "")
 fi
 
 if [ -z "${name}" ] || [ "${name}" == "" ]; then
