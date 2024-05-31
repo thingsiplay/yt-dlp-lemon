@@ -95,6 +95,7 @@ options:
 
   -p                playlist mode, download entire list with index names
   -P                same as -p, but don't write index number into name
+  -R                same as -p, but with reverse index order
   -a                audio mode, extract and keep audio file only
   -k                keep all intermediate and uncut video files
 
@@ -150,7 +151,7 @@ EOF
 }
 
 OPTIND=1
-while getopts ':hHvm:l:r:n:i:If:F:wsSbBcCpPakdDeEqx' OPTION; do
+while getopts ':hHvm:l:r:n:i:If:F:wsSbBcCpPRakdDeEqx' OPTION; do
 	case "$OPTION" in
 	h)
 		help_header
@@ -233,6 +234,10 @@ while getopts ':hHvm:l:r:n:i:If:F:wsSbBcCpPakdDeEqx' OPTION; do
 	P)
 		playlist=true
 		without_playlist_index=true
+		;;
+	R)
+		playlist=true
+		reverse_playlist_index=true
 		;;
 	a)
 		extract_audio=true
@@ -354,12 +359,15 @@ if [ -z "${name}" ] || [ "${name}" == "" ]; then
 fi
 
 if [ -n "${playlist}" ] && [ "${playlist}" == true ]; then
+	cmd+=(--yes-playlist)
 	if [ -n "${without_playlist_index}" ] && [ "${without_playlist_index}" == true ]; then
 		index=""
+	elif [ -n "${reverse_playlist_index}" ] && [ "${reverse_playlist_index}" == true ]; then
+		cmd+=(--playlist-reverse)
+		index="%(autonumber)s - "
 	else
 		index="%(playlist_index)s - "
 	fi
-	cmd+=(--yes-playlist)
 	if [ -z "${skip_download}" ] || [ "${skip_download}" == false ]; then
 		playlist_name="%(playlist_title)s/${index}"
 		cmd+=(
