@@ -6,6 +6,8 @@ Simple wrapper to yt-dlp with only a subset of options.
 - Source: [Github](https://github.com/thingsiplay/yt-dlp-lemon)
 - License: [MIT](LICENSE)
 
+![lemon logo](./lemon.svg "logo")
+
 ## Important: Project name changed
 
 Name of project changed from `ytdl` to `yt-dlp-lemon` . If you used it before
