@@ -1,6 +1,19 @@
 # Changelog
 
-Keep track of changes for [ytdl](https://github.com/thingsiplay/ytdl) .
+Keep track of changes for
+[yt-dlp-lemon](https://github.com/thingsiplay/yt-dlp-lemon) .
+
+## Next
+
+- **breaking**! Project name was changed from "ytdl" to "yt-dlp-lemon", so it
+  is less confusing when researching and to distinguish itself from other
+  projects. This also makes the path to the default ignore file different. So you
+  should rename the directory
+
+  - from: "~/.local/share/ytdl"
+  - to: "~/.local/share/yt-dlp-lemon"
+
+  And adapt any aliases or scripts that refer to the old executable name.
 
 ## 0.4 - Mai 31, 2024
 
