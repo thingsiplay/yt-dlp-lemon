@@ -258,10 +258,11 @@ yt-dlp-lemon -f mp4 -I https://youtu.be/jNQXAC9IVRw
 
 A re-encoding of the video content can be forced with uppercase `-F` if needed.
 This has much more freedom to choose output format than `-f` and will take much
-longer time to finish:
+longer time to finish. In the example here we combine `-F` with `-a` to
+actually get an audio file in mp3 format, otherwise its still a video.
 
 ```bash
-yt-dlp-lemon -F mp3 -I https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -a -F mp3 -I https://youtu.be/jNQXAC9IVRw
 ```
 
 Have a great rest of your day.
