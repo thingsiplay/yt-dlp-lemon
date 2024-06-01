@@ -3,7 +3,7 @@
 Keep track of changes for
 [yt-dlp-lemon](https://github.com/thingsiplay/yt-dlp-lemon) .
 
-## Next
+## 0.5 - June 1, 2024
 
 - **breaking**! Project name was changed from "ytdl" to "yt-dlp-lemon", so it
   is less confusing when researching and to distinguish itself from other

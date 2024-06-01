@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 app_name='yt-dlp-lemon'
-app_version='0.4'
+app_version='0.5'
 
 # python3 yt-dlp python-mutagen ffmpeg
 
