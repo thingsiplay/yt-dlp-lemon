@@ -267,4 +267,8 @@ actually get an audio file in mp3 format, otherwise its still a video.
 yt-dlp-lemon -a -F mp3 -I https://youtu.be/jNQXAC9IVRw
 ```
 
+And by the way, yt-dlp does not only support YouTube, despite its name
+suggesting that. Full list of all supported sites can be found here: [yt-dlp:
+supportedsites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md)
+
 Have a great rest of your day.
