@@ -97,8 +97,8 @@ options:
   -P                same as -p, but don't write index number into name
   -R                same as -p, but with reverse index order
   -a                audio mode, extract and keep audio file only
-  -k                keep all intermediate and uncut video files
 
+  -k                keep all intermediate and uncut video files
   -d                save description and info-json as separate text files
   -D                same as -d, but download all type of extra files
   -e                embed metadata and chapter marks into video file
