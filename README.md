@@ -121,7 +121,7 @@ make use of this option many times, so the examples are quickly done. `HEIGHT`
 is the pixel dimension for the video height:
 
 ```bash
-yt-dlp-lemon -I -m 160 https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -m 160 -I https://youtu.be/jNQXAC9IVRw
 ```
 
 If you have limited internet bandwidth and don't want to slow the entire
@@ -129,7 +129,7 @@ connection down until download process is finished, then just limit the
 download speed with `-l MB`:
 
 ```bash
-yt-dlp-lemon -I -l 1.2 https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -l 1.2 -I https://youtu.be/jNQXAC9IVRw
 ```
 
 When downloading and saving a video, then it is automatically named including
@@ -138,7 +138,7 @@ characters. Option `-r LEN` will restrict those characters to ASCII set and
 truncate its length to whatever is specified:
 
 ```bash
-yt-dlp-lemon -I -r 8 https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -r 8 -I https://youtu.be/jNQXAC9IVRw
 ```
 
 ### Playlist or audio mode
@@ -149,7 +149,7 @@ combine this with option `-m` to download small versions of the video. This
 results in 4 videos and 22 MB (at time of writing this document):
 
 ```bash
-yt-dlp-lemon -I -m 240 -p https://youtube.com/playlist?list=PL6-7feKhsltT9ZTElq6V2Z2EZN71wyxrX
+yt-dlp-lemon -p -m 240 -I https://youtube.com/playlist?list=PL6-7feKhsltT9ZTElq6V2Z2EZN71wyxrX
 ```
 
 For some playlists, the top most entry will always be the first newest added
@@ -159,14 +159,14 @@ in reverse order with `-R`. There is also an option uppercase `-P` to avoid
 numbering of downloaded filenames entirely.
 
 ```bash
-yt-dlp-lemon -I -m 240 -R https://youtube.com/playlist?list=PL6-7feKhsltT9ZTElq6V2Z2EZN71wyxrX
+yt-dlp-lemon -R -m 240 -I https://youtube.com/playlist?list=PL6-7feKhsltT9ZTElq6V2Z2EZN71wyxrX
 ```
 
 Extract and keep an audio file format only with option `-a` . Useful for music
 or podcasts, where the visual part is not important or present at all.
 
 ```bash
-yt-dlp-lemon -I -a https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -a -I https://youtu.be/jNQXAC9IVRw
 ```
 
 ### Sponsor and chapter marks
@@ -175,7 +175,7 @@ Split video by it's chapter marks and create separate files in a sub directory
 with option `-c`:
 
 ```bash
-yt-dlp-lemon -I -c https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -c -I https://youtu.be/jNQXAC9IVRw
 ```
 
 Did you know `yt-dlp` supports [SponsorBlock](https://sponsor.ajay.app/)
@@ -185,7 +185,7 @@ VLC player) then you can view and select those marks directly. Option `-s` will
 add chapter marks into the video, and recognizes sponsors automatically.
 
 ```bash
-yt-dlp-lemon -I -m 160 -s https://youtu.be/9Jxxbh4HbtE
+yt-dlp-lemon -s -m 160 -I https://youtu.be/9Jxxbh4HbtE
 ```
 
 Sponsored segments can be automatically removed and blocked in the final video
@@ -194,7 +194,7 @@ following example 2 segments are recognized and removed, cutting total video
 length from 9:42 to 8:51 minutes.
 
 ```bash
-yt-dlp-lemon -I -m 160 -b https://youtu.be/9Jxxbh4HbtE
+yt-dlp-lemon -b -m 160 -I https://youtu.be/9Jxxbh4HbtE
 ```
 
 Uppercase `-S` and `-B` does the same respectively, but recognizes more type of
@@ -203,14 +203,14 @@ will recognize 7 segments from SponsorBlock database and reduce total video
 length to 8:18 minutes.
 
 ```bash
-yt-dlp-lemon -I -m 160 -B https://youtu.be/9Jxxbh4HbtE
+yt-dlp-lemon -B -m 160 -I https://youtu.be/9Jxxbh4HbtE
 ```
 
 Combine `-S` and `-b` in example to block sponsors from final output file and
 add rest of the chapter marks in addition to get the best of both worlds:
 
 ```bash
-yt-dlp-lemon -I -m 160 -Sb https://youtu.be/9Jxxbh4HbtE
+yt-dlp-lemon -Sb -m 160 -I https://youtu.be/9Jxxbh4HbtE
 ```
 
 ### Metadata and extra files
@@ -219,7 +219,7 @@ Additional video description and info files are downloaded alongside the video
 with option `-d`:
 
 ```bash
-yt-dlp-lemon -I -m 160 -d https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -d -m 160 -I https://youtu.be/jNQXAC9IVRw
 ```
 
 Metadata and chapter marks can be embedded into the video file itself with
@@ -231,7 +231,7 @@ ffmpeg 7.0.1, but it seems to be not working either. ffmpeg is the software
 used by yt-dlp itself._)
 
 ```bash
-yt-dlp-lemon -I -m 160 -e https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -e -m 160 -I https://youtu.be/jNQXAC9IVRw
 ```
 
 To write even more of these extra files, such as thumbnail image or a desktop
@@ -242,7 +242,7 @@ type of embedded data. Therefore the output file format will be "mkv" to
 support everything.
 
 ```bash
-yt-dlp-lemon -I -m 160 -DE https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -DE -m 160 -I https://youtu.be/jNQXAC9IVRw
 ```
 
 ### Output format
@@ -253,7 +253,7 @@ can fail, if the container does not support the audio or video codecs or
 any specific feature. On the other hand this is lossless conversion and fast:
 
 ```bash
-yt-dlp-lemon -I -f mp4 https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -f mp4 -I https://youtu.be/jNQXAC9IVRw
 ```
 
 A re-encoding of the video content can be forced with uppercase `-F` if needed.
@@ -261,7 +261,7 @@ This has much more freedom to choose output format than `-f` and will take much
 longer time to finish:
 
 ```bash
-yt-dlp-lemon -I -F mp3 https://youtu.be/jNQXAC9IVRw
+yt-dlp-lemon -F mp3 -I https://youtu.be/jNQXAC9IVRw
 ```
 
 Have a great rest of your day.
