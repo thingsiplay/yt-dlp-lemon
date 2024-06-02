@@ -3,6 +3,11 @@
 Keep track of changes for
 [yt-dlp-lemon](https://github.com/thingsiplay/yt-dlp-lemon) .
 
+## Next
+
+- changed: default extraction retries increased from 3 to 10, this affects
+  SponsorBlock
+
 ## 0.5 - June 1, 2024
 
 - **breaking**! Project name was changed from "ytdl" to "yt-dlp-lemon", so it
