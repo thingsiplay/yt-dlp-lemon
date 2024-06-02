@@ -286,6 +286,8 @@ shift "$((OPTIND - 1))"
 cmd=(
 	yt-dlp
 	--ignore-errors
+	--extractor-retries
+	10
 )
 
 if [ -n "${format_recode}" ] && ! [ "${format_recode}" == "" ]; then
